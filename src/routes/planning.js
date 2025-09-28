@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const planningController = require('../controllers/planningController');
 
-// Planning routes
 router.post('/planning/save', planningController.savePlanning);
 router.get('/planning', planningController.getPlanning);
 router.put('/planning/assignment', planningController.updatePlanningAssignment);

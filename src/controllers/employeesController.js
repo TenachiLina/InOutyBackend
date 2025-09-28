@@ -1,6 +1,5 @@
 const db = require('../db');
 
-// Get all employees
 exports.getEmployees = (req, res) => {
   db.query('SELECT * FROM employees', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -26,7 +25,6 @@ exports.deleteEmployee = (req, res) => {
     res.json({ message: "✅ Employee deleted successfully" });
   });
 };
-// Add new employee
 exports.addEmployee = (req, res) => {
   const { name } = req.body;
   if (!name) return res.status(400).json({ error: "Name is required" });

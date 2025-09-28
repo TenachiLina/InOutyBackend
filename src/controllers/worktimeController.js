@@ -1,6 +1,5 @@
 const db = require('../db');
 
-// Save work time - FIXED to match your table structure
 exports.saveWorkTime = (req, res) => {
   const { employeeId, date, clockIn, clockOut, timeOfWork, shift, delay, overtime } = req.body;
   
@@ -8,8 +7,6 @@ exports.saveWorkTime = (req, res) => {
     return res.status(400).json({ error: "Employee ID and date are required" });
   }
 
-  // Your table doesn't have clock_in, clock_out columns based on your CREATE TABLE
-  // So we're only inserting the columns that actually exist
   db.query(
     'INSERT INTO worktime (emp_id, shift_id, work_date, late_minutes, overtime_minutes, work_hours) VALUES (?, ?, ?, ?, ?, ?)',
     [employeeId, shift || null, date, delay || 0, overtime || 0, timeOfWork || 0],
@@ -34,13 +31,12 @@ exports.getWorkTimesByEmployee = (req, res) => {
   );
 };
 
-// Get work times by date - FIXED (This is the main issue)
+// Get work times by date 
 exports.getWorkTimesByDate = (req, res) => {
   const { date } = req.params;
   
   console.log('Fetching worktimes for date:', date);
   
-  // CORRECTED QUERY - using actual column names from your table
   const query = `
     SELECT 
       w.worktime_id,
@@ -76,13 +72,11 @@ exports.getWorkTimesByDate = (req, res) => {
   });
 };
 
-// Update work time - FIXED
+// Update work time 
 exports.updateWorkTime = (req, res) => {
   const { id } = req.params;
   const { clockIn, clockOut, timeOfWork, delay, overtime } = req.body;
   
-  // Your table doesn't have clock_in, clock_out columns
-  // Only update the columns that exist
   db.query(
     'UPDATE worktime SET work_hours = ?, late_minutes = ?, overtime_minutes = ? WHERE worktime_id = ?',
     [timeOfWork || 0, delay || 0, overtime || 0, id],

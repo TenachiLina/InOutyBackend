@@ -1,6 +1,5 @@
 const db = require('../db');
 
-// Save planning data
 exports.savePlanning = (req, res) => {
   const { plan_date, assignments } = req.body;
   
@@ -10,7 +9,6 @@ exports.savePlanning = (req, res) => {
 
   console.log('💾 Saving planning for date:', plan_date);
   
-  // Start transaction
   db.beginTransaction((err) => {
     if (err) {
       console.error('❌ Transaction error:', err);
@@ -128,10 +126,10 @@ function validateAndTransformAssignments(assignments, shifts, tasks) {
   // Create mappings for easier lookup
   const shiftMap = {};
   shifts.forEach(shift => {
-    // Map by position (1st, 2nd, 3rd shift) since your frontend expects 1,2,3
-    if (shift.shift_id === 1) shiftMap[1] = shift.shift_id; // First shift
-    if (shift.shift_id === 2) shiftMap[2] = shift.shift_id; // Second shift  
-    if (shift.shift_id === 3) shiftMap[3] = shift.shift_id; // Third shift
+
+    if (shift.shift_id === 1) shiftMap[1] = shift.shift_id; 
+    if (shift.shift_id === 2) shiftMap[2] = shift.shift_id;  
+    if (shift.shift_id === 3) shiftMap[3] = shift.shift_id; 
   });
 
   const taskMap = {};
@@ -191,7 +189,6 @@ exports.getShifts = (req, res) => {
       return res.status(500).json({ error: err.message });
     }
 
-    // Transform to match frontend expectations
     const transformedShifts = results.map(shift => ({
       shift_id: shift.shift_id,
       name: `${shift.start_time.toString().split(' ')[4]}-${shift.end_time.toString().split(' ')[4]} (${shift.shift_id})`,
@@ -224,7 +221,6 @@ exports.getTasks = (req, res) => {
   });
 };
 
-// Other functions (getPlanning, updatePlanningAssignment, deletePlanning) remain similar...
 
 // Get planning for a specific date
 exports.getPlanning = (req, res) => {
